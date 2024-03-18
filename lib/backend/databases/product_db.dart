@@ -1,5 +1,6 @@
-import 'package:seller_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:seller_app/backend/models/product_request_model.dart';
+import 'package:seller_app/constants.dart';
 
 class ProductsDatabase {
   Future<QuerySnapshot<Map<String, dynamic>>> getAllProducts() async => await productsCollection.get();
@@ -22,12 +23,18 @@ class ProductsDatabase {
     // print(id);
   }
 
-  Stream<int> checkProductRequestStatus({required String productId})  {
-    final result =  productRequestsCollection
+  Stream<int> checkProductRequestStatus({required String productId}) {
+    final result = productRequestsCollection
         .where("productId", isEqualTo: productId)
         .where("userId", isEqualTo: firebaseAuth.currentUser!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs.length);
+    return result;
+  }
+
+  Future<List<ProductRequestModel>> getAllProductRequests({required String productId}) async {
+    final request = await productRequestsCollection.where("productId", isEqualTo: productId).get();
+    final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
     return result;
   }
 }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:seller_app/backend/models/product_model.dart';
+import 'package:seller_app/backend/models/product_request_model.dart';
+import 'package:seller_app/backend/providers/products_provider.dart';
+import 'package:seller_app/product_request_details_section.dart';
 
 class ViewProductPage extends StatelessWidget {
   final ProductModel product;
@@ -7,14 +11,15 @@ class ViewProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var productsProvider = context.read<ProductsProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Image.network(
@@ -32,7 +37,7 @@ class ViewProductPage extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              'Price: \$${product.price}',
+              'Price:  Kes ${product.price}',
               style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -44,12 +49,25 @@ class ViewProductPage extends StatelessWidget {
               style: const TextStyle(fontSize: 16.0),
             ),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                // Add to cart or purchase logic
-              },
-              child: const Text('Add to Cart'),
-            ),
+            FutureBuilder<List<ProductRequestModel>>(
+                future: productsProvider.getAllProductRequests(productId: product.id),
+                initialData: productsProvider.productRequests,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data != null) {
+                      var productRequestList = snapshot.data;
+                      return ProductDetailView(
+                        product: product,
+                        requests: productRequestList,
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }else {
+                    return LinearProgressIndicator();
+                  }
+                }),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),

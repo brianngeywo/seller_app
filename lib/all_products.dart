@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seller_app/backend/providers/products_provider.dart';
+import 'package:seller_app/view_product_page.dart';
 
 class ViewAllProductsScreen extends StatelessWidget {
   const ViewAllProductsScreen({super.key});
@@ -26,10 +28,12 @@ class ViewAllProductsScreen extends StatelessWidget {
                     return ListTile(
                       leading: Image.network(product.imageUrl),
                       title: Text(product.title),
-                      subtitle: Text(product.description),
-                      trailing: Text('\$${product.price}'),
+                      // subtitle: Text(product.description),
+                      subtitle: Text('kes ${product.price}'),
                       onTap: () {
                         // Navigate to product detail view
+                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) =>
+                        ViewProductPage(product: product)));
                       },
                     );
                   },
