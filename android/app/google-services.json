@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "565948037312",
+    "project_id": "baraton-soko-project",
+    "storage_bucket": "baraton-soko-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565948037312:android:1d3aba0dd29d87b0b71525",
+        "android_client_info": {
+          "package_name": "com.baraton_soko.seller_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdrYX-KGKN7IftjwzdBOHrOpsB9fsRl8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565948037312:android:823781d9a20c08abb71525",
+        "android_client_info": {
+          "package_name": "com.example.baraton_soko"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdrYX-KGKN7IftjwzdBOHrOpsB9fsRl8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
