@@ -11,7 +11,7 @@ class ViewProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var productsProvider = context.read<ProductsProvider>();
+    ProductsProvider productsProvider = context.read<ProductsProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title),
@@ -55,7 +55,7 @@ class ViewProductPage extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data != null) {
-                      var productRequestList = snapshot.data;
+                      List<ProductRequestModel> productRequestList = snapshot.data;
                       return ProductDetailView(
                         product: product,
                         requests: productRequestList,

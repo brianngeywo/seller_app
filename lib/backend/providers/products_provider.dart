@@ -44,6 +44,7 @@ class ProductsProvider with ChangeNotifier {
   Future<List<ProductRequestModel>> getAllProductRequests({required String productId}) async {
     final result = await _getAllRequestsUseCase.call(productId: productId);
     _productRequests = result;
+    notifyListeners();
     return result;
   }
 

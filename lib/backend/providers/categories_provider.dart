@@ -31,10 +31,13 @@ class CategoriesProvider extends ChangeNotifier {
     notifyListeners();
     return response;
   }
-selectCategory(CategoryModel category) async {
+
+  selectCategory(CategoryModel category) async {
     await fetchCategoryProducts(category.id);
     _selectedCategory = category;
     notifyListeners();
   }
-  Future<List<ProductModel>> fetchCategoryProducts(String categoryId) async => await _categoryProductsUseCase.getAllSingleCategoryProducts(category: categoryId);
+
+  Future<List<ProductModel>> fetchCategoryProducts(String categoryId) async =>
+      await _categoryProductsUseCase.getAllSingleCategoryProducts(category: categoryId);
 }
