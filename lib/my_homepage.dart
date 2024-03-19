@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seller_app/all_products.dart';
 import 'package:seller_app/edit_seller_profile.dart';
+import 'package:seller_app/local_data.dart';
 import 'package:seller_app/upload_product.dart';
 import 'package:seller_app/view_requests.dart';
 
@@ -267,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: MaterialButton(
                     color: Colors.blue,
                     onPressed: () =>
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const EditSellerProfile())),
+                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditSellerProfile(user: dummyUser,))),
                     child: Container(
                       margin: const EdgeInsets.all(8.0),
                       child: const Text("Edit seller profile"),
