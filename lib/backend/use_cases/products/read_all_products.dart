@@ -5,7 +5,7 @@ import 'package:seller_app/backend/models/product_model.dart';
 class ReadAllProductsUseCase {
   final ProductsDatabase _database;
   ReadAllProductsUseCase(this._database);
-   Future<List<ProductModel>> getAllProducts() async {
+   Future<List<ProductModel>> call() async {
     final result = await _database.getAllProducts();
     var products = result.docs.map((e) => ProductModel.fromMap(e.data())).toList();
     return products;

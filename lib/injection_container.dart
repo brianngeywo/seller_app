@@ -33,30 +33,30 @@ class GetItInjectionContainer {
       ..registerLazySingleton<ReadAllcategoriesUseCase>(() => ReadAllcategoriesUseCase(getIt()))
       ..registerLazySingleton<ReadCategoryProductsUseCase>(() => ReadCategoryProductsUseCase(getIt()))
       ..registerLazySingleton<CategoriesDatabase>(() => CategoriesDatabase());
-
-    getIt
-      ..registerFactory<ProductsProvider>(() => ProductsProvider(
-            readAllProductsUseCase: getIt(),
-            readAllProductsSortByLikesUseCase: getIt(),
-            readAllLatestProductsSortByCreatedUseCase: getIt(),
-            readSingleProductUseCase: getIt(),
-            requestProductUseCase: getIt(),
-            checkProductRequestStatusUseCase: getIt(),
-            getAllRequestsUseCase: getIt(),
-          ))
-      ..registerLazySingleton<ReadAllProductsUseCase>(() => ReadAllProductsUseCase(getIt()))
-      ..registerLazySingleton<GetAllRequestsUseCase>(() => GetAllRequestsUseCase(getIt()))
-      ..registerLazySingleton<ReadAllProductsSortByLikesUseCase>(() => ReadAllProductsSortByLikesUseCase(getIt()))
-      ..registerLazySingleton<CheckProductRequestStatusUseCase>(
-          () => CheckProductRequestStatusUseCase(productsDatabase: getIt()))
-      ..registerLazySingleton<RequestProductUseCase>(() => RequestProductUseCase(productsDatabase: getIt()))
-      ..registerLazySingleton<ReadAllLatestProductsSortByCreatedUseCase>(
-          () => ReadAllLatestProductsSortByCreatedUseCase(getIt()))
-      ..registerLazySingleton<ReadProductLikesUseCase>(() => ReadProductLikesUseCase(getIt()))
-      ..registerLazySingleton<ReadProductDislikesUseCase>(() => ReadProductDislikesUseCase(getIt()))
-      ..registerLazySingleton<ReadSingleProductUseCase>(() => ReadSingleProductUseCase(getIt()))
-      ..registerLazySingleton<LikeDisLikeDatabase>(() => LikeDisLikeDatabase())
-      ..registerLazySingleton<ProductsDatabase>(() => ProductsDatabase());
+    //
+    // getIt
+    //   ..registerFactory<ProductsProvider>(() => ProductsProvider(
+    //         readAllProductsUseCase: getIt(),
+    //         readAllProductsSortByLikesUseCase: getIt(),
+    //         readAllLatestProductsSortByCreatedUseCase: getIt(),
+    //         readSingleProductUseCase: getIt(),
+    //         requestProductUseCase: getIt(),
+    //         checkProductRequestStatusUseCase: getIt(),
+    //         getAllRequestsUseCase: getIt(),
+    //       ))
+    //   ..registerLazySingleton<ReadAllProductsUseCase>(() => ReadAllProductsUseCase(getIt()))
+    //   ..registerLazySingleton<GetAllRequestsUseCase>(() => GetAllRequestsUseCase(getIt()))
+    //   ..registerLazySingleton<ReadAllProductsSortByLikesUseCase>(() => ReadAllProductsSortByLikesUseCase(getIt()))
+    //   ..registerLazySingleton<CheckProductRequestStatusUseCase>(
+    //       () => CheckProductRequestStatusUseCase(productsDatabase: getIt()))
+    //   ..registerLazySingleton<RequestProductUseCase>(() => RequestProductUseCase(productsDatabase: getIt()))
+    //   ..registerLazySingleton<ReadAllLatestProductsSortByCreatedUseCase>(
+    //       () => ReadAllLatestProductsSortByCreatedUseCase(getIt()))
+    //   ..registerLazySingleton<ReadProductLikesUseCase>(() => ReadProductLikesUseCase(getIt()))
+    //   ..registerLazySingleton<ReadProductDislikesUseCase>(() => ReadProductDislikesUseCase(getIt()))
+    //   ..registerLazySingleton<ReadSingleProductUseCase>(() => ReadSingleProductUseCase(getIt()))
+    //   ..registerLazySingleton<LikeDisLikeDatabase>(() => LikeDisLikeDatabase())
+    //   ..registerLazySingleton<ProductsDatabase>(() => ProductsDatabase());
 
     getIt
       ..registerFactory<UsersProvider>(() => UsersProvider(

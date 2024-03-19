@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => getIt<UsersProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<CategoriesProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<LikeDislikesProvider>()),
-        ChangeNotifierProvider(create: (context) => getIt<ProductsProvider>()),
+        // ChangeNotifierProvider(create: (context) => getIt<ProductsProvider>()),
       ],
       child: MaterialApp(
       title: 'Flutter Demo',

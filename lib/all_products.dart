@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seller_app/backend/databases/product_db.dart';
+import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/providers/products_provider.dart';
+import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
+import 'package:seller_app/constants.dart';
 import 'package:seller_app/view_product_page.dart';
 
 class ViewAllProductsScreen extends StatelessWidget {
@@ -9,18 +13,19 @@ class ViewAllProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsProvider = context.read<ProductsProvider>();
+    final getAllProducts = ReadAllProductsUseCase(ProductsDatabase());
     return Scaffold(
       appBar: AppBar(
         title: Text('appbarTitle'),
       ),
-      body: FutureBuilder(
-          future: productsProvider.getAllProducts(),
-          initialData: productsProvider.products,
+      body: FutureBuilder<List<ProductModel>>(
+          future: getAllProducts.call(),
+          initialData: <ProductModel>[],
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data != null) {
-                var products = snapshot.data;
+                var products = snapshot.data.where((product) => product.vendorId == firebaseAuth.currentUser!.uid)
+                    .toList();
                 return ListView.builder(
                   itemCount: products.length,
                   itemBuilder: (context, index) {

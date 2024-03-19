@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:seller_app/backend/databases/category_db.dart';
+import 'package:seller_app/backend/models/category_model.dart';
 import 'package:seller_app/backend/models/product_model.dart';
-
+import 'package:seller_app/backend/use_cases/categories/read_all_categories.dart';
+import 'package:seller_app/constants.dart';
 
 
 class UploadProductPage extends StatefulWidget {
@@ -24,9 +27,11 @@ class _UploadProductPageState extends State<UploadProductPage> {
 
   Future<void> _uploadProduct() async {
     if (_formKey.currentState!.validate()) {
-      final productId = DateTime.now().millisecondsSinceEpoch.toString();
-      final categoryId = 'defaultCategory'; // Set your desired category ID
-      final vendorId = 'defaultVendor'; // Set your desired vendor ID
+      final productId = DateTime
+          .now()
+          .millisecondsSinceEpoch
+          .toString();
+      final vendorId = firebaseAuth.currentUser!.uid; // Set your desired vendor ID
 
       // Upload the image to Firebase Storage
       final imageUrl = await _uploadImageToFirebaseStorage(productId);
@@ -35,7 +40,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
         id: productId,
         title: _titleController.text,
         description: _descriptionController.text,
-        categoryId: categoryId,
+        categoryId: selectedCategory,
         imageUrl: imageUrl,
         vendorId: vendorId,
         price: _priceController.text,
@@ -61,9 +66,10 @@ class _UploadProductPageState extends State<UploadProductPage> {
       _imageFile = pickedFile;
     });
   }
-
+String selectedCategory = "";
   @override
   Widget build(BuildContext context) {
+    var allCategories = ReadAllcategoriesUseCase(CategoriesDatabase());
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Product'),
@@ -75,6 +81,21 @@ class _UploadProductPageState extends State<UploadProductPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              FutureBuilder<List<CategoryModel>>(
+                  future: allCategories.getAllcategories(),
+                  initialData: <CategoryModel>[],
+                  builder: (context, snapshot) {
+                    return DropdownButtonFormField(items: snapshot.data!.map((e) =>
+                        DropdownMenuItem(child: Text(e
+                            .name), value: e.id))
+                        .toList(),
+                        onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                        });
+                  }
+              ),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Title'),
