@@ -94,7 +94,7 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
                 lastName: _lastNameController.text,
                 email: _emailController.text,
                 phoneNumber: _phoneNumberController.text,
-                password: _passwordController.text,
+                password: _passwordController.text, username: 'username',
               );
 
               print(updatedUser.toMap());

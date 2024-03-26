@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:seller_app/backend/databases/users_db.dart';
 import 'package:seller_app/backend/models/user_model.dart';
 import 'package:seller_app/backend/use_cases/users/create_user.dart';
 import 'package:seller_app/backend/use_cases/users/read_user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class UsersProvider extends ChangeNotifier {
@@ -38,11 +38,17 @@ class UsersProvider extends ChangeNotifier {
     required String firstName,
     required String lastName,
     required String email,
+    required String username,
     required String phoneNumber,
     required String password,
   }) async {
-    await _createUserUseCase
-        .call(UserModel(id: const Uuid().v8(), firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, password: password));
+    await _createUserUseCase.call(UserModel(
+        id: const Uuid().v8(),
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password, username: username));
     notifyListeners();
   }
 
@@ -81,11 +87,23 @@ class UsersProvider extends ChangeNotifier {
   Future<UserModel> readSingleUser({required String id}) async => await _readSingleUserUseCase.call(id: id);
 
   Future<void> signUpWithEmailAndPassword(
-      {required String email, required String password, required String firstName, required String lastName, required String phoneNumber}) async {
+      {required String email,
+      required String password,
+      required String firstName,
+      required String lastName,
+      required String phoneNumber,
+      required String username}) async {
     final result = await _signUpUseCase(password: password, email: email);
     if (result != null) {
-      await _createUserUseCase.call(
-          UserModel(id: result.user!.uid, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, password: password));
+      await _createUserUseCase.call(UserModel(
+        id: result.user!.uid,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password,
+        username: username,
+      ));
       isLoggedIn = true;
       notifyListeners();
     } else {

@@ -13,18 +13,20 @@ class ViewAllProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var productsProvider = context.read<ProductsProvider>();
     final getAllProducts = ReadAllProductsUseCase(ProductsDatabase());
     return Scaffold(
       appBar: AppBar(
-        title: Text('appbarTitle'),
+        title: Text('Your products'),
       ),
       body: FutureBuilder<List<ProductModel>>(
-          future: getAllProducts.call(),
-          initialData: <ProductModel>[],
+          future: productsProvider.getAllProducts(),
+          initialData: productsProvider.products,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
+            print(snapshot.data);
             if (snapshot.hasData) {
               if (snapshot.data != null) {
-                var products = snapshot.data.where((product) => product.vendorId == firebaseAuth.currentUser!.uid)
+                var products = snapshot.data.where((product) => product.vendorId =="Rrw0OpSPQuB4MKlmrino")
                     .toList();
                 return ListView.builder(
                   itemCount: products.length,

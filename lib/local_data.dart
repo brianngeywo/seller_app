@@ -7,4 +7,5 @@ final dummyUser = UserModel(
   email: 'johndoe@example.com',
   phoneNumber: '1234567890',
   password: 'mypassword',
+  username: "username"
 );

@@ -5,7 +5,8 @@ import 'package:seller_app/constants.dart';
 class ProductsDatabase {
   Future<QuerySnapshot<Map<String, dynamic>>> getAllProducts() async => await productsCollection.get();
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getSingleProduct({required String productId}) {
+  Future<DocumentSnapshot<Map<String, dynamic>>>
+  getSingleProduct({required String productId}) {
     return productsCollection.doc(productId).get();
   }
 

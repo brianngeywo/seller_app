@@ -3,6 +3,7 @@ class UserModel {
   final String firstName;
   final String lastName;
   final String email;
+  final String username;
   final String phoneNumber;
   final String password;
 
@@ -11,6 +12,7 @@ class UserModel {
     required this.firstName,
     required this.lastName,
     required this.email,
+    required this.username,
     required this.phoneNumber,
     required this.password,
   });
@@ -21,6 +23,7 @@ class UserModel {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'username': username,
       'phoneNumber': phoneNumber,
       'password': password,
     };
@@ -28,12 +31,18 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] as String,
-      firstName: map['firstName'] as String,
-      lastName: map['lastName'] as String,
-      email: map['email'] as String,
-      phoneNumber: map['phoneNumber'] as String,
-      password: map['password'] as String,
+      id: map['id'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      email: map['email'],
+      username: map['username'],
+      phoneNumber: map['phoneNumber'],
+      password: map['password'],
     );
+  }
+
+  factory UserModel.empty() {
+    return UserModel(id: '', firstName: 'waiting...', lastName: '', email: '', phoneNumber: 'waiting...', password: '', username: '');
+
   }
 }

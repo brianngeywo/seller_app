@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,8 @@ import 'package:seller_app/backend/providers/categories_provider.dart';
 import 'package:seller_app/backend/providers/like_dislikes_provider.dart';
 import 'package:seller_app/backend/providers/products_provider.dart';
 import 'package:seller_app/backend/providers/users_provider.dart';
+import 'package:seller_app/constants.dart';
+// import 'package:seller_app/backend/providers/users_provider.dart';
 import 'package:seller_app/injection_container.dart';
 import 'package:seller_app/my_homepage.dart';
 
@@ -24,12 +27,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.signInAnonymously();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => getIt<UsersProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<CategoriesProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<LikeDislikesProvider>()),
-        // ChangeNotifierProvider(create: (context) => getIt<ProductsProvider>()),
+        ChangeNotifierProvider(create: (context) => getIt<ProductsProvider>()),
       ],
       child: MaterialApp(
       title: 'Flutter Demo',
