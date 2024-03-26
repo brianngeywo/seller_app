@@ -14,6 +14,7 @@ import 'package:seller_app/backend/use_cases/like_dislike/like_product.dart';
 import 'package:seller_app/backend/use_cases/like_dislike/read_product_dislikes.dart';
 import 'package:seller_app/backend/use_cases/like_dislike/read_product_likes.dart';
 import 'package:seller_app/backend/use_cases/like_dislike/stream_product_likes_count.dart';
+import 'package:seller_app/backend/use_cases/product_request/accept_product_request.dart';
 import 'package:seller_app/backend/use_cases/product_request/get_all_product_requests.dart';
 import 'package:seller_app/backend/use_cases/product_request/request_product.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
@@ -43,6 +44,9 @@ class GetItInjectionContainer {
             requestProductUseCase: getIt(),
             checkProductRequestStatusUseCase: getIt(),
             getAllRequestsUseCase: getIt(),
+            acceptRequestProductUseCase: getIt(),
+            denyRequestProductUseCase: getIt(),
+            deleteProductRequestUseCase: getIt(),
           ))
       ..registerLazySingleton<ReadAllProductsUseCase>(() => ReadAllProductsUseCase(getIt()))
       ..registerLazySingleton<GetAllRequestsUseCase>(() => GetAllRequestsUseCase(getIt()))
@@ -54,6 +58,9 @@ class GetItInjectionContainer {
           () => ReadAllLatestProductsSortByCreatedUseCase(getIt()))
       ..registerLazySingleton<ReadProductLikesUseCase>(() => ReadProductLikesUseCase(getIt()))
       ..registerLazySingleton<ReadProductDislikesUseCase>(() => ReadProductDislikesUseCase(getIt()))
+      ..registerLazySingleton<AcceptRequestProductUseCase>(() => AcceptRequestProductUseCase(getIt()))
+      ..registerLazySingleton<DenyRequestProductUseCase>(() => DenyRequestProductUseCase(getIt()))
+      ..registerLazySingleton<DeleteProductRequestUseCase>(() => DeleteProductRequestUseCase(getIt()))
       ..registerLazySingleton<ReadSingleProductUseCase>(() => ReadSingleProductUseCase(getIt()))
       ..registerLazySingleton<LikeDisLikeDatabase>(() => LikeDisLikeDatabase())
       ..registerLazySingleton<ProductsDatabase>(() => ProductsDatabase());

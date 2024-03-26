@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/models/product_request_model.dart';
+import 'package:seller_app/backend/use_cases/product_request/accept_product_request.dart';
 import 'package:seller_app/backend/use_cases/product_request/get_all_product_requests.dart';
 import 'package:seller_app/backend/use_cases/product_request/request_product.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
@@ -26,6 +27,9 @@ class ProductsProvider with ChangeNotifier {
   final RequestProductUseCase _requestProductUseCase;
   final CheckProductRequestStatusUseCase _checkProductRequestStatusUseCase;
   final GetAllRequestsUseCase _getAllRequestsUseCase;
+  final AcceptRequestProductUseCase _acceptRequestProductUseCase;
+  final DenyRequestProductUseCase _denyRequestProductUseCase;
+  final DeleteProductRequestUseCase _deleteProductRequestUseCase;
 
   Future<List<ProductModel>> getAllProducts() async {
     final result = await _readAllProductsUseCase.call();
@@ -70,6 +74,9 @@ class ProductsProvider with ChangeNotifier {
     required RequestProductUseCase requestProductUseCase,
     required CheckProductRequestStatusUseCase checkProductRequestStatusUseCase,
     required GetAllRequestsUseCase getAllRequestsUseCase,
+    required AcceptRequestProductUseCase acceptRequestProductUseCase,
+    required DenyRequestProductUseCase denyRequestProductUseCase,
+    required DeleteProductRequestUseCase deleteProductRequestUseCase,
   })  : _products = [],
         _productRequests = [],
         _readAllProductsUseCase = readAllProductsUseCase,
@@ -78,5 +85,8 @@ class ProductsProvider with ChangeNotifier {
         _readAllProductsSortByLikesUseCase = readAllProductsSortByLikesUseCase,
         _readAllLatestProductsSortByCreatedUseCase = readAllLatestProductsSortByCreatedUseCase,
         _getAllRequestsUseCase = getAllRequestsUseCase,
-        _readSingleProductUseCase = readSingleProductUseCase;
+        _readSingleProductUseCase = readSingleProductUseCase,
+        _acceptRequestProductUseCase = acceptRequestProductUseCase,
+  _deleteProductRequestUseCase = deleteProductRequestUseCase,
+        _denyRequestProductUseCase = denyRequestProductUseCase;
 }

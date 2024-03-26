@@ -12,8 +12,10 @@ class ViewProductPage extends StatelessWidget {
 
   const ViewProductPage({super.key, required this.product});
 
+
   @override
   Widget build(BuildContext context) {
+    String selectedAction = "";
     UsersProvider userProvider = context.read<UsersProvider>();
     var getProductRequest = GetAllRequestsUseCase(ProductsDatabase());
     return Scaffold(
@@ -97,8 +99,22 @@ class ViewProductPage extends StatelessWidget {
                                         if (snapshot.data != null) {
                                           UserModel user = snapshot.data;
                                           return ListTile(
-                                            title: Text(user.firstName + user.lastName),
+                                            title: Text(user.firstName + " " + user.lastName),
                                             subtitle: Text(user.phoneNumber),
+                                            trailing: SizedBox(
+                                              // height: 10,
+                                              width: 100,
+                                              child: DropdownButtonFormField(
+                                                value: selectedAction,
+                                                icon: Icon(Icons.more_vert_sharp),
+                                                items: actions.map(
+                                                  (e) => DropdownMenuItem(child: Text(e.title)),
+                                                ).toList(),
+                                                onChanged: (value) {
+                                                selectedAction =   value.id;
+                                                },
+                                              ),
+                                            ),
                                           );
                                         } else {
                                           return const Text("fetching data....");
@@ -113,10 +129,10 @@ class ViewProductPage extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return LinearProgressIndicator();
+                      return const Text("fetching data....");
                     }
                   } else {
-                    return LinearProgressIndicator();
+                    return const Text("fetching data....");
                   }
                 }),
             const SizedBox(height: 16.0),
@@ -125,4 +141,17 @@ class ViewProductPage extends StatelessWidget {
       ),
     );
   }
+}
+
+List<ActionModel> actions = [
+  ActionModel(title: 'Accept', id: "0"),
+  ActionModel(title: 'Deny', id: "1"),
+  ActionModel(title: 'Delete', id: "1"),
+];
+
+class ActionModel {
+  final String title;
+  final String id;
+
+  ActionModel({required this.title, required this.id});
 }

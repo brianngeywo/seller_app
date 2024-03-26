@@ -38,4 +38,20 @@ class ProductsDatabase {
     final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
     return result;
   }
+
+  acceptedRequest({required String requestId}) async {
+    // final request = await productRequestsCollection.where("productId", isEqualTo: productId).get();
+await productRequestsCollection.doc(requestId).update({"isAccepted": true});
+  }
+
+  denyRequest({required String requestId}) async {
+    await productRequestsCollection.doc(requestId).update({"isDenied": true});
+
+  }
+
+  deleteRequest({required String requestId}) async {
+    await productRequestsCollection.doc(requestId).delete();
+
+
+  }
 }
