@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/models/product_request_model.dart';
 import 'package:seller_app/constants.dart';
 
 class ProductsDatabase {
   Future<QuerySnapshot<Map<String, dynamic>>> getAllProducts() async => await productsCollection.get();
 
-  Future<DocumentSnapshot<Map<String, dynamic>>>
-  getSingleProduct({required String productId}) {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getSingleProduct({required String productId}) {
     return productsCollection.doc(productId).get();
   }
 
@@ -41,17 +41,30 @@ class ProductsDatabase {
 
   acceptedRequest({required String requestId}) async {
     // final request = await productRequestsCollection.where("productId", isEqualTo: productId).get();
-await productRequestsCollection.doc(requestId).update({"isAccepted": true});
+    await productRequestsCollection.doc(requestId).update({"isAccepted": true});
   }
 
   denyRequest({required String requestId}) async {
     await productRequestsCollection.doc(requestId).update({"isDenied": true});
-
   }
 
   deleteRequest({required String requestId}) async {
     await productRequestsCollection.doc(requestId).delete();
+  }
 
+  editSingleProduct({required ProductModel product}) async =>
+      await productsCollection.doc(product.id).update(product.toMap());
 
+  deleteSingleProduct({required String productId}) async =>
+      await productsCollection.doc(productId).delete();
+
+  createSingleProduct({required ProductModel product}) async {
+    await productRequestsCollection.doc(product.id).set(product.toMap());
+  }
+
+  Future<List<ProductRequestModel>> getAllProductRequestsUsingVendorIdUseCase({required String vendorId})  async {
+    final request = await productRequestsCollection.where("vendorId", isEqualTo: vendorId).get();
+    final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
+    return result;
   }
 }

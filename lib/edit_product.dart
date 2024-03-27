@@ -3,49 +3,54 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:seller_app/backend/databases/category_db.dart';
 import 'package:seller_app/backend/databases/product_db.dart';
 import 'package:seller_app/backend/models/category_model.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/use_cases/categories/read_all_categories.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
-import 'package:seller_app/constants.dart';
+import 'package:seller_app/local_data.dart';
 
-class UploadProductPage extends StatefulWidget {
-  const UploadProductPage({Key? key}) : super(key: key);
+import 'backend/providers/products_provider.dart';
+
+class EditProductPage extends StatefulWidget {
+  final ProductModel productModel;
+
+  const EditProductPage({Key? key, required this.productModel}) : super(key: key);
 
   @override
-  _UploadProductPageState createState() => _UploadProductPageState();
+  State<EditProductPage> createState() => _EditProductPageState();
 }
 
-class _UploadProductPageState extends State<UploadProductPage> {
+class _EditProductPageState extends State<EditProductPage> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _priceController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
   XFile? _imageFile;
 
-  Future<void> _uploadProduct() async {
-    CreateSingleProductUseCase _createSingleProductUseCase = CreateSingleProductUseCase(ProductsDatabase());
+  Future<void> _uploadProduct({required ProductModel product}) async {
+    EditSingleProductUseCase _editSingleProductUseCase = EditSingleProductUseCase(ProductsDatabase());
     if (_formKey.currentState!.validate()) {
       final productId = DateTime.now().millisecondsSinceEpoch.toString();
-      final vendorId = firebaseAuth.currentUser!.uid; // Set your desired vendor ID
+      final vendorId = dummyUser.id; // Set your desired vendor ID
+      // final vendorId = firebaseAuth.currentUser!.uid; // Set your desired vendor ID
 
       // Upload the image to Firebase Storage
       final imageUrl = await _uploadImageToFirebaseStorage(productId);
-
-      final product = ProductModel(
-        id: productId,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        categoryId: selectedCategory,
-        imageUrl: imageUrl,
-        vendorId: vendorId,
-        price: _priceController.text,
-      );
-      await _createSingleProductUseCase.createSingleProduct(product: product);
+      await _editSingleProductUseCase.editSingleProduct(
+          product: ProductModel(
+              id: product.id,
+              title: product.title,
+              description: product.description,
+              categoryId: product.categoryId,
+              imageUrl: imageUrl,
+              vendorId: product.vendorId,
+              price: product.price));
       // Save the product to your database or perform any other necessary operations
-      print('New product created: $product');
+      print('New product created: $productId');
+      print('New image created: $imageUrl');
     }
   }
 
@@ -65,10 +70,19 @@ class _UploadProductPageState extends State<UploadProductPage> {
     });
   }
 
+  @override
+  void initState() {
+    _titleController = TextEditingController(text: widget.productModel.title);
+    _descriptionController = TextEditingController(text: widget.productModel.description);
+    _priceController = TextEditingController(text: widget.productModel.price);
+    super.initState();
+  }
+
   String selectedCategory = "";
 
   @override
   Widget build(BuildContext context) {
+    var productsProvider = context.read<ProductsProvider>();
     var allCategories = ReadAllcategoriesUseCase(CategoriesDatabase());
     return Scaffold(
       appBar: AppBar(
@@ -138,7 +152,16 @@ class _UploadProductPageState extends State<UploadProductPage> {
                     ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _uploadProduct,
+                onPressed: () => _uploadProduct(
+                    product: ProductModel(
+                  id: widget.productModel.id,
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  categoryId: selectedCategory,
+                  imageUrl: '',
+                  vendorId: dummyUser.id,
+                  price: _priceController.text,
+                )),
                 child: const Text('Upload Product'),
               ),
             ],

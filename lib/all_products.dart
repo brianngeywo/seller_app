@@ -5,14 +5,21 @@ import 'package:seller_app/backend/databases/product_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/providers/products_provider.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
-import 'package:seller_app/constants.dart';
+import 'package:seller_app/edit_product.dart';
+import 'package:seller_app/local_data.dart';
 import 'package:seller_app/view_product_page.dart';
 
-class ViewAllProductsScreen extends StatelessWidget {
+class ViewAllProductsScreen extends StatefulWidget {
   const ViewAllProductsScreen({super.key});
 
   @override
+  State<ViewAllProductsScreen> createState() => _ViewAllProductsScreenState();
+}
+
+class _ViewAllProductsScreenState extends State<ViewAllProductsScreen> {
+  @override
   Widget build(BuildContext context) {
+    String selectedAction = "";
     var productsProvider = context.read<ProductsProvider>();
     final getAllProducts = ReadAllProductsUseCase(ProductsDatabase());
     return Scaffold(
@@ -26,8 +33,8 @@ class ViewAllProductsScreen extends StatelessWidget {
             print(snapshot.data);
             if (snapshot.hasData) {
               if (snapshot.data != null) {
-                var products = snapshot.data.where((product) => product.vendorId =="Rrw0OpSPQuB4MKlmrino")
-                    .toList();
+                List<ProductModel> products =
+                    snapshot.data.where((product) => product.vendorId == dummyUser.id).toList();
                 return ListView.builder(
                   itemCount: products.length,
                   itemBuilder: (context, index) {
@@ -37,10 +44,44 @@ class ViewAllProductsScreen extends StatelessWidget {
                       title: Text(product.title),
                       // subtitle: Text(product.description),
                       subtitle: Text('kes ${product.price}'),
+                      trailing: SizedBox(
+                        // height: 10,
+                        width: 100,
+                        child: DropdownButton(
+                          // value: selectedAction,
+                          icon: Icon(Icons.more_vert_sharp),
+                          items: productActions
+                              .map(
+                                (e) => DropdownMenuItem(
+                                    onTap: () {
+                                      switch (e.id) {
+                                        case "1":
+                                          Navigator.of(context).push(CupertinoPageRoute(
+                                              builder: (context) => EditProductPage(productModel: product)));
+                                          break;
+                                        case "2":
+                                          productsProvider.deleteSingleProduct(e.id);
+                                          Navigator.of(context).pop();
+                                          break;
+                                        default:
+                                          Navigator.of(context).pop();
+                                      }
+                                    },
+                                    value: e.id,
+                                    child: Text(e.title)),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedAction = value!;
+                            });
+                          },
+                        ),
+                      ),
                       onTap: () {
                         // Navigate to product detail view
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) =>
-                        ViewProductPage(product: product)));
+                        Navigator.of(context)
+                            .push(CupertinoPageRoute(builder: (context) => ViewProductPage(product: product)));
                       },
                     );
                   },
@@ -55,3 +96,8 @@ class ViewAllProductsScreen extends StatelessWidget {
     );
   }
 }
+
+List<ActionModel> productActions = [
+  ActionModel(title: 'Edit', id: "1"),
+  ActionModel(title: 'Delete', id: "2"),
+];

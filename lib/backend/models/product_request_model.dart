@@ -1,14 +1,16 @@
 class ProductRequestModel {
   final String id;
   final String productId;
-  final String userId;
+  final String requesterId;
+  final String vendorId;
   final bool isAccepted;
   final bool isDenied;
 
   ProductRequestModel(
       {required this.id,
       required this.productId,
-      required this.userId,
+      required this.requesterId,
+      required this.vendorId,
       required this.isAccepted,
       required this.isDenied});
 
@@ -16,7 +18,8 @@ class ProductRequestModel {
     return {
       'id': this.id,
       'productId': this.productId,
-      'userId': this.userId,
+      'requesterId': this.requesterId,
+      'vendorId': this.vendorId,
       'isAccepted': this.isAccepted,
       'isDenied': this.isDenied,
     };
@@ -26,7 +29,8 @@ class ProductRequestModel {
     return ProductRequestModel(
       id: map['id'],
       productId: map['productId'],
-      userId: map['userId'],
+      requesterId: map['requesterId'],
+      vendorId: map['vendorId'],
       isAccepted: map['isAccepted'],
       isDenied: map['isDenied'],
     );

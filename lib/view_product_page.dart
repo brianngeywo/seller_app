@@ -7,12 +7,16 @@ import 'package:seller_app/backend/models/user_model.dart';
 import 'package:seller_app/backend/providers/users_provider.dart';
 import 'package:seller_app/backend/use_cases/product_request/get_all_product_requests.dart';
 
-class ViewProductPage extends StatelessWidget {
+class ViewProductPage extends StatefulWidget {
   final ProductModel product;
 
   const ViewProductPage({super.key, required this.product});
 
+  @override
+  State<ViewProductPage> createState() => _ViewProductPageState();
+}
 
+class _ViewProductPageState extends State<ViewProductPage> {
   @override
   Widget build(BuildContext context) {
     String selectedAction = "";
@@ -20,7 +24,7 @@ class ViewProductPage extends StatelessWidget {
     var getProductRequest = GetAllRequestsUseCase(ProductsDatabase());
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title),
+        title: Text(widget.product.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,13 +33,13 @@ class ViewProductPage extends StatelessWidget {
           children: [
             Expanded(
               child: Image.network(
-                product.imageUrl,
+                widget.product.imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
             const SizedBox(height: 16.0),
             Text(
-              product.title,
+              widget.product.title,
               style: const TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -43,7 +47,7 @@ class ViewProductPage extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              'Price:  Kes ${product.price}',
+              'Price:  Kes ${widget.product.price}',
               style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -51,18 +55,18 @@ class ViewProductPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             Text(
-              product.description,
+              widget.product.description,
               style: const TextStyle(fontSize: 16.0),
             ),
             const SizedBox(height: 16.0),
             FutureBuilder<List<ProductRequestModel>>(
-                future: getProductRequest.call(productId: product.id),
-                initialData: <ProductRequestModel>[].where((request) => request.productId == product.id).toList(),
+                future: getProductRequest.call(productId: widget.product.id),
+                initialData: <ProductRequestModel>[].where((request) => request.productId == widget.product.id).toList(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data != null) {
                       List<ProductRequestModel> requests =
-                          snapshot.data.where((request) => request.productId == product.id).toList();
+                          snapshot.data.where((request) => request.productId == widget.product.id).toList();
 
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -90,9 +94,9 @@ class ViewProductPage extends StatelessWidget {
                               itemCount: requests.length,
                               itemBuilder: (context, index) {
                                 final request = requests[index];
-                                print("user id: " + request.userId);
+                                print("user id: " + request.requesterId);
                                 return FutureBuilder<UserModel>(
-                                    future: userProvider.readSingleUser(id: request.userId),
+                                    future: userProvider.readSingleUser(id: request.requesterId),
                                     initialData: UserModel.empty(),
                                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                                       if (snapshot.hasData) {
@@ -104,14 +108,18 @@ class ViewProductPage extends StatelessWidget {
                                             trailing: SizedBox(
                                               // height: 10,
                                               width: 100,
-                                              child: DropdownButtonFormField(
-                                                value: selectedAction,
+                                              child: DropdownButton(
+                                                // value: selectedAction,
                                                 icon: Icon(Icons.more_vert_sharp),
                                                 items: actions.map(
-                                                  (e) => DropdownMenuItem(child: Text(e.title)),
+                                                  (e) => DropdownMenuItem(
+                                                      value: e.id,
+                                                      child: Text(e.title)),
                                                 ).toList(),
                                                 onChanged: (value) {
-                                                selectedAction =   value.id;
+                                                setState(() {
+                                                  selectedAction =   value!;
+                                                });
                                                 },
                                               ),
                                             ),
@@ -154,4 +162,12 @@ class ActionModel {
   final String id;
 
   ActionModel({required this.title, required this.id});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ActionModel && runtimeType == other.runtimeType && title == other.title && id == other.id;
+
+  @override
+  int get hashCode => title.hashCode ^ id.hashCode;
 }

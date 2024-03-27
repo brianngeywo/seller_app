@@ -8,85 +8,80 @@ import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<ProductModel> _products = [];
-  List<ProductRequestModel> _productRequests = [];
+  List<ProductModel> products = [];
+  List<ProductRequestModel> productRequests = [];
 
-  List<ProductModel> get products => _products;
-
-  List<ProductRequestModel> get productRequests => _productRequests;
-
-  void addProduct(ProductModel product) {
-    _products.add(product);
-    notifyListeners();
-  }
-
-  final ReadAllProductsUseCase _readAllProductsUseCase;
-  final ReadAllProductsSortByLikesUseCase _readAllProductsSortByLikesUseCase;
-  final ReadAllLatestProductsSortByCreatedUseCase _readAllLatestProductsSortByCreatedUseCase;
-  final ReadSingleProductUseCase _readSingleProductUseCase;
-  final RequestProductUseCase _requestProductUseCase;
-  final CheckProductRequestStatusUseCase _checkProductRequestStatusUseCase;
-  final GetAllRequestsUseCase _getAllRequestsUseCase;
-  final AcceptRequestProductUseCase _acceptRequestProductUseCase;
-  final DenyRequestProductUseCase _denyRequestProductUseCase;
-  final DeleteProductRequestUseCase _deleteProductRequestUseCase;
+  final ReadAllProductsUseCase readAllProductsUseCase;
+  final ReadAllProductsSortByLikesUseCase readAllProductsSortByLikesUseCase;
+  final ReadAllLatestProductsSortByCreatedUseCase readAllLatestProductsSortByCreatedUseCase;
+  final ReadSingleProductUseCase readSingleProductUseCase;
+  final RequestProductUseCase requestProductUseCase;
+  final CheckProductRequestStatusUseCase checkProductRequestStatusUseCase;
+  final GetAllRequestsUseCase getAllRequestsUseCase;
+  final AcceptRequestProductUseCase acceptRequestProductUseCase;
+  final DenyRequestProductUseCase denyRequestProductUseCase;
+  final DeleteProductRequestUseCase deleteProductRequestUseCase;
+  final DeleteSingleProductUseCase deleteSingleProductUseCase;
+  final EditSingleProductUseCase editSingleProductUseCase;
+  final GetAllProductRequestsUsingVendorIdUseCase getAllProductRequestsUsingVendorIdUseCase;
 
   Future<List<ProductModel>> getAllProducts() async {
-    final result = await _readAllProductsUseCase.call();
-    _products = result;
+    final result = await readAllProductsUseCase.call();
+    products = result;
     // print(result);
     notifyListeners();
     return result;
   }
 
   Future<List<ProductModel>> getAllProductsSortByLikes() async =>
-      await _readAllProductsSortByLikesUseCase.getAllProductsSortByLikes();
+      await readAllProductsSortByLikesUseCase.getAllProductsSortByLikes();
 
   Future<List<ProductModel>> getAllLatestProductsSortByCreated() async =>
-      await _readAllLatestProductsSortByCreatedUseCase.getAllLatestProductsSortByCreated();
+      await readAllLatestProductsSortByCreatedUseCase.getAllLatestProductsSortByCreated();
 
   Future<List<ProductRequestModel>> getAllProductRequests({required String productId}) async {
-    final result = await _getAllRequestsUseCase.call(productId: productId);
-    _productRequests = result;
+    final result = await getAllRequestsUseCase.call(productId: productId);
+    productRequests = result;
     notifyListeners();
     return result;
   }
 
   Future<ProductModel> getSingleProduct(String productId) async =>
-      await _readSingleProductUseCase.getSingleProduct(productId: productId);
+      await readSingleProductUseCase.getSingleProduct(productId: productId);
+
+  Future<void> deleteSingleProduct(String productId) async =>
+      await deleteSingleProductUseCase.deleteSingleProduct(productId: productId);
+
+  Future<void> editProduct({required ProductModel product}) async =>
+      await editSingleProductUseCase.editSingleProduct(product: product);
 
   Future<void> requestProduct({required String productId}) async =>
-      await _requestProductUseCase.call(productId: productId);
+      await requestProductUseCase.call(productId: productId);
 
   Stream<int> checkProductRequestStatus({required productId}) =>
-      _checkProductRequestStatusUseCase.call(productId: productId);
+      checkProductRequestStatusUseCase.call(productId: productId);
 
   void clearProducts() {
-    _products = [];
+    products = [];
     notifyListeners();
   }
 
   ProductsProvider({
-    required ReadAllProductsUseCase readAllProductsUseCase,
-    required ReadAllProductsSortByLikesUseCase readAllProductsSortByLikesUseCase,
-    required ReadAllLatestProductsSortByCreatedUseCase readAllLatestProductsSortByCreatedUseCase,
-    required ReadSingleProductUseCase readSingleProductUseCase,
-    required RequestProductUseCase requestProductUseCase,
-    required CheckProductRequestStatusUseCase checkProductRequestStatusUseCase,
-    required GetAllRequestsUseCase getAllRequestsUseCase,
-    required AcceptRequestProductUseCase acceptRequestProductUseCase,
-    required DenyRequestProductUseCase denyRequestProductUseCase,
-    required DeleteProductRequestUseCase deleteProductRequestUseCase,
-  })  : _products = [],
-        _productRequests = [],
-        _readAllProductsUseCase = readAllProductsUseCase,
-        _requestProductUseCase = requestProductUseCase,
-        _checkProductRequestStatusUseCase = checkProductRequestStatusUseCase,
-        _readAllProductsSortByLikesUseCase = readAllProductsSortByLikesUseCase,
-        _readAllLatestProductsSortByCreatedUseCase = readAllLatestProductsSortByCreatedUseCase,
-        _getAllRequestsUseCase = getAllRequestsUseCase,
-        _readSingleProductUseCase = readSingleProductUseCase,
-        _acceptRequestProductUseCase = acceptRequestProductUseCase,
-  _deleteProductRequestUseCase = deleteProductRequestUseCase,
-        _denyRequestProductUseCase = denyRequestProductUseCase;
+    required this.readAllProductsUseCase,
+    required this.readAllProductsSortByLikesUseCase,
+    required this.readAllLatestProductsSortByCreatedUseCase,
+    required this.readSingleProductUseCase,
+    required this.requestProductUseCase,
+    required this.checkProductRequestStatusUseCase,
+    required this.getAllRequestsUseCase,
+    required this.acceptRequestProductUseCase,
+    required this.denyRequestProductUseCase,
+    required this.deleteProductRequestUseCase,
+    required this.deleteSingleProductUseCase,
+    required this.editSingleProductUseCase,
+    required this.getAllProductRequestsUsingVendorIdUseCase,
+  });
+
+  Future<List<ProductRequestModel>> getAllProductRequestsUsingVendorId({required String vendorId}) async =>
+      await getAllProductRequestsUsingVendorIdUseCase.getAllProductRequestsUsingVendorIdUseCase(vendorId: vendorId);
 }

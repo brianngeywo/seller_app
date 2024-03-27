@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:seller_app/backend/databases/users_db.dart';
 import 'package:seller_app/backend/models/user_model.dart';
+import 'package:seller_app/backend/use_cases/users/edit_user.dart';
+
 class EditSellerProfile extends StatefulWidget {
   final UserModel user;
 
@@ -13,6 +16,7 @@ class EditSellerProfile extends StatefulWidget {
 class _EditSellerProfileState extends State<EditSellerProfile> {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
+  late TextEditingController _usernameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _passwordController;
@@ -25,6 +29,7 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
     _emailController = TextEditingController(text: widget.user.email);
     _phoneNumberController = TextEditingController(text: widget.user.phoneNumber);
     _passwordController = TextEditingController(text: widget.user.password);
+    _usernameController = TextEditingController(text: widget.user.username);
   }
 
   @override
@@ -34,6 +39,7 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
     _emailController.dispose();
     _phoneNumberController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
@@ -46,6 +52,15 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          TextField(
+            controller: _usernameController,
+            decoration: const InputDecoration(
+              labelText: 'Username'
+                  ''
+                  '',
+            ),
+          ),
+          const SizedBox(height: 16.0),
           TextField(
             controller: _firstNameController,
             decoration: const InputDecoration(
@@ -87,16 +102,19 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: () {
+              EditUserUseCase _editUser = EditUserUseCase(UsersDatabase());
               // Update user profile with the new data
               final updatedUser = UserModel(
-                id: widget.user.id,
-                firstName: _firstNameController.text,
-                lastName: _lastNameController.text,
-                email: _emailController.text,
-                phoneNumber: _phoneNumberController.text,
-                password: _passwordController.text, username: 'username',
-              );
+                  id: widget.user.id,
+                  firstName: _firstNameController.text,
+                  lastName: _lastNameController.text,
+                  email: _emailController.text,
+                  phoneNumber: _phoneNumberController.text,
+                  password: _passwordController.text,
+                  username: _usernameController.text);
 
+              _editUser.call(updatedUser);
+              Navigator.of(context).pop();
               print(updatedUser.toMap());
             },
             child: const Text('Save Changes'),

@@ -46,7 +46,7 @@ class GetItInjectionContainer {
             getAllRequestsUseCase: getIt(),
             acceptRequestProductUseCase: getIt(),
             denyRequestProductUseCase: getIt(),
-            deleteProductRequestUseCase: getIt(),
+            deleteProductRequestUseCase: getIt(), deleteSingleProductUseCase: getIt(), editSingleProductUseCase: getIt(), getAllProductRequestsUsingVendorIdUseCase: getIt(),
           ))
       ..registerLazySingleton<ReadAllProductsUseCase>(() => ReadAllProductsUseCase(getIt()))
       ..registerLazySingleton<GetAllRequestsUseCase>(() => GetAllRequestsUseCase(getIt()))
@@ -62,6 +62,9 @@ class GetItInjectionContainer {
       ..registerLazySingleton<DenyRequestProductUseCase>(() => DenyRequestProductUseCase(getIt()))
       ..registerLazySingleton<DeleteProductRequestUseCase>(() => DeleteProductRequestUseCase(getIt()))
       ..registerLazySingleton<ReadSingleProductUseCase>(() => ReadSingleProductUseCase(getIt()))
+      ..registerLazySingleton<DeleteSingleProductUseCase>(() => DeleteSingleProductUseCase(getIt()))
+      ..registerLazySingleton<EditSingleProductUseCase>(() => EditSingleProductUseCase(getIt()))
+      ..registerLazySingleton<GetAllProductRequestsUsingVendorIdUseCase>(() => GetAllProductRequestsUsingVendorIdUseCase(getIt()))
       ..registerLazySingleton<LikeDisLikeDatabase>(() => LikeDisLikeDatabase())
       ..registerLazySingleton<ProductsDatabase>(() => ProductsDatabase());
 
