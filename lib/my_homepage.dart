@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: Colors.blue,
                               ),
                               FutureBuilder<List<ProductModel>>(
-                                  future: getAllProductsUsingVendorIdUseCase.call(dummyUser.id),
+                                  future: getAllProductsUsingVendorIdUseCase.call(firebaseAuth.currentUser!.uid),
                                   initialData: <ProductModel>[],
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: Colors.blue,
                               ),
                               FutureBuilder<List<String>>(
-                                  future: getAllClientsUsingVendorIdUseCase.call(vendorId: dummyUser.id),
+                                  future: getAllClientsUsingVendorIdUseCase.call(vendorId: firebaseAuth.currentUser!.uid),
                                   initialData: <String>[],
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {
@@ -197,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               FutureBuilder<List<ProductRequestModel>>(
                                   future: getAllProductRequestsUsingVendorIdUseCase
-                                      .call(vendorId: dummyUser.id),
+                                      .call(vendorId: firebaseAuth.currentUser!.uid),
                                   initialData: <ProductRequestModel>[],
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {
@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               FutureBuilder<List<ProductRequestModel>>(
                                   future: getAllProductRequestsUsingVendorIdUseCase
-                                      .call(vendorId: dummyUser.id),
+                                      .call(vendorId: firebaseAuth.currentUser!.uid),
                                   initialData: <ProductRequestModel>[],
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {
@@ -336,7 +336,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.blue,
                     onPressed: () => Navigator.of(context).push(CupertinoPageRoute(
                         builder: (context) => EditSellerProfile(
-                              user: dummyUser,
                             ))),
                     child: Container(
                       margin: const EdgeInsets.all(8.0),

@@ -9,6 +9,7 @@ import 'package:seller_app/backend/models/user_model.dart';
 import 'package:seller_app/backend/use_cases/product_request/accept_product_request.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 import 'package:seller_app/backend/use_cases/users/read_user.dart';
+import 'package:seller_app/constants.dart';
 import 'package:seller_app/local_data.dart';
 import 'package:seller_app/view_product_page.dart';
 
@@ -29,14 +30,14 @@ class _ViewProductRequestsScreenState extends State<ViewProductRequestsScreen> {
         title: Text('Your products requests'),
       ),
       body: FutureBuilder<List<ProductRequestModel>>(
-          future: getAllProductRequests.call(vendorId: dummyUser.id),
+          future: getAllProductRequests.call(vendorId: firebaseAuth.currentUser!.uid),
           initialData: <ProductRequestModel>[],
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             print(snapshot.data);
             if (snapshot.hasData) {
               if (snapshot.data != null) {
                 List<ProductRequestModel> productRequests =
-                    snapshot.data.where((productRequest) => productRequest.vendorId == dummyUser.id).toList();
+                    snapshot.data.where((productRequest) => productRequest.vendorId == firebaseAuth.currentUser!.uid).toList();
                 return ListView.builder(
                   itemCount: productRequests.length,
                   itemBuilder: (context, index) {

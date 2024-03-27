@@ -5,6 +5,7 @@ import 'package:seller_app/backend/databases/product_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
+import 'package:seller_app/constants.dart';
 import 'package:seller_app/edit_product.dart';
 import 'package:seller_app/local_data.dart';
 import 'package:seller_app/view_product_page.dart';
@@ -25,7 +26,7 @@ class _ViewAllProductsScreenState extends State<ViewAllProductsScreen> {
         title: Text('Your products'),
       ),
       body: FutureBuilder<List<ProductModel>>(
-          future: getAllProductsUsingVendorIdUseCase.call(dummyUser.id),
+          future: getAllProductsUsingVendorIdUseCase.call(firebaseAuth.currentUser!.uid),
           initialData: <ProductModel>[] ,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             print(snapshot.data);

@@ -10,6 +10,7 @@ import 'package:seller_app/backend/models/category_model.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/use_cases/categories/read_all_categories.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
+import 'package:seller_app/constants.dart';
 import 'package:seller_app/local_data.dart';
 
 class EditProductPage extends StatefulWidget {
@@ -32,8 +33,8 @@ class _EditProductPageState extends State<EditProductPage> {
     EditSingleProductUseCase _editSingleProductUseCase = EditSingleProductUseCase(ProductsDatabase());
     if (_formKey.currentState!.validate()) {
       final productId = DateTime.now().millisecondsSinceEpoch.toString();
-      final vendorId = dummyUser.id; // Set your desired vendor ID
-      // final vendorId = firebaseAuth.currentUser!.uid; // Set your desired vendor ID
+
+      final vendorId = firebaseAuth.currentUser!.uid; // Set your desired vendor ID
 
       // Upload the image to Firebase Storage
       final imageUrl = await _uploadImageToFirebaseStorage(productId);
@@ -155,7 +156,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   description: _descriptionController.text,
                   categoryId: selectedCategory,
                   imageUrl: '',
-                  vendorId: dummyUser.id,
+                  vendorId: firebaseAuth.currentUser!.uid,
                   price: _priceController.text,
                 )),
                 child: const Text('Upload Product'),

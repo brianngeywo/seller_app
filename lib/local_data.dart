@@ -11,14 +11,14 @@ import 'package:seller_app/backend/use_cases/users/create_user.dart';
 import 'package:seller_app/backend/use_cases/users/edit_user.dart';
 import 'package:seller_app/backend/use_cases/users/read_user.dart';
 
-final dummyUser = UserModel(
-    id: 'Rrw0OpSPQuB4MKlmrino',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndoe@example.com',
-    phoneNumber: '1234567890',
-    password: 'mypassword',
-    username: "username");
+// final dummyUser = UserModel(
+//     id: 'Rrw0OpSPQuB4MKlmrino',
+//     firstName: 'John',
+//     lastName: 'Doe',
+//     email: 'johndoe@example.com',
+//     phoneNumber: '1234567890',
+//     password: 'mypassword',
+//     username: "username");
 final ReadSingleUserUseCase readSingleUser = ReadSingleUserUseCase(UsersDatabase());
 final AcceptRequestProductUseCase acceptProductRequest = AcceptRequestProductUseCase(ProductsDatabase());
 final DenyRequestProductUseCase denyProductRequest = DenyRequestProductUseCase(ProductsDatabase());
