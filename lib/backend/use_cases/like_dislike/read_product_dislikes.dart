@@ -7,7 +7,7 @@ class ReadProductDislikesUseCase {
 
   ReadProductDislikesUseCase(this._database);
 
-  Future<List<LikeDislikeModel>> readProductDislikes({required String productId}) async {
+  Future<List<LikeDislikeModel>> call({required String productId}) async {
     final result = await _database.readProductDislikes(productId: productId);
     var dislikes = result.map((e) => LikeDislikeModel.fromMap(e.data())).toList();
     return dislikes;

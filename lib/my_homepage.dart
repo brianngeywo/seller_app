@@ -1,6 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:seller_app/all_products.dart';
+import 'package:seller_app/backend/databases/product_db.dart';
+import 'package:seller_app/backend/models/product_model.dart';
+import 'package:seller_app/backend/models/product_request_model.dart';
+import 'package:seller_app/backend/providers/products_provider.dart';
+import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
+import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
+import 'package:seller_app/constants.dart';
 import 'package:seller_app/edit_seller_profile.dart';
 import 'package:seller_app/local_data.dart';
 import 'package:seller_app/upload_product.dart';
@@ -14,6 +22,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final getAllProductRequestsUsingVendorIdUseCase = GetAllProductRequestsUsingVendorIdUseCase(ProductsDatabase());
+  final GetAllProductsUsingVendorIdUseCase getAllProductsUsingVendorIdUseCase =
+      GetAllProductsUsingVendorIdUseCase(ProductsDatabase());
+  final GetAllClientsUsingVendorIdUseCase getAllClientsUsingVendorIdUseCase =
+      GetAllClientsUsingVendorIdUseCase(ProductsDatabase());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.white,
                       elevation: 5,
                       margin: const EdgeInsets.all(8),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -81,13 +95,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                 size: 20,
                                 color: Colors.blue,
                               ),
-                              Text(
-                                "20",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                              FutureBuilder<List<ProductModel>>(
+                                  future: getAllProductsUsingVendorIdUseCase.call(firebaseAuth.currentUser!.uid),
+                                  initialData: <ProductModel>[],
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      if (snapshot.data != null) {
+                                        return Text(
+                                          snapshot.data.length,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text("loading...");
+                                      }
+                                    } else {
+                                      return Text("loading...");
+                                    }
+                                  }),
                             ],
                           ),
                           Padding(
@@ -107,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.white,
                       elevation: 5,
                       margin: const EdgeInsets.all(8),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -119,13 +146,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                 size: 20,
                                 color: Colors.blue,
                               ),
-                              Text(
-                                "20",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                              FutureBuilder<List<String>>(
+                                  future: getAllClientsUsingVendorIdUseCase.call(vendorId: dummyUser.id),
+                                  initialData: <String>[],
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      if (snapshot.data != null) {
+                                        var users = [];
+                                        var productRequests = snapshot.data;
+
+                                        return Text(
+                                          productRequests.length.toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text("loading...");
+                                      }
+                                    } else {
+                                      return Text("loading...");
+                                    }
+                                  }),
                             ],
                           ),
                           Padding(
@@ -145,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.white,
                       elevation: 5,
                       margin: const EdgeInsets.all(8),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -157,13 +200,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                 size: 20,
                                 color: Colors.blue,
                               ),
-                              Text(
-                                "20",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                              FutureBuilder<List<ProductRequestModel>>(
+                                  future: getAllProductRequestsUsingVendorIdUseCase
+                                      .call(vendorId: dummyUser.id),
+                                  initialData: <ProductRequestModel>[],
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      if (snapshot.data != null) {
+                                        return Text(
+                                          snapshot.data.length.toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text("loading...");
+                                      }
+                                    } else {
+                                      return Text("loading...");
+                                    }
+                                  }),
                             ],
                           ),
                           Padding(
@@ -183,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.white,
                       elevation: 5,
                       margin: const EdgeInsets.all(8),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -195,13 +252,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                 size: 20,
                                 color: Colors.blue,
                               ),
-                              Text(
-                                "20",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                              FutureBuilder<List<ProductRequestModel>>(
+                                  future: getAllProductRequestsUsingVendorIdUseCase
+                                      .call(vendorId: dummyUser.id),
+                                  initialData: <ProductRequestModel>[],
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      if (snapshot.data != null) {
+                                        List<ProductRequestModel> requests = snapshot.data;
+                                        return Text(
+                                          requests.where((request) => request.isAccepted == true).length.toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text("loading...");
+                                      }
+                                    } else {
+                                      return Text("loading...");
+                                    }
+                                  }),
                             ],
                           ),
                           Padding(
@@ -231,8 +303,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: double.infinity,
                   child: MaterialButton(
                     color: Colors.blue,
-                    onPressed: () =>
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ViewAllProductsScreen())),
+                    onPressed: () => Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (context) => const ViewAllProductsScreen())),
                     child: Container(margin: const EdgeInsets.all(8.0), child: const Text("View all products")),
                   ),
                 ),
@@ -255,8 +327,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: double.infinity,
                   child: MaterialButton(
                     color: Colors.blue,
-                    onPressed: () =>
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ViewProductRequestsScreen())),
+                    onPressed: () => Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (context) => const ViewProductRequestsScreen())),
                     child: Container(margin: const EdgeInsets.all(8.0), child: const Text("View product requests")),
                   ),
                 ),
@@ -267,8 +339,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: double.infinity,
                   child: MaterialButton(
                     color: Colors.blue,
-                    onPressed: () =>
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditSellerProfile(user: dummyUser,))),
+                    onPressed: () => Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => EditSellerProfile(
+                              user: dummyUser,
+                            ))),
                     child: Container(
                       margin: const EdgeInsets.all(8.0),
                       child: const Text("Edit seller profile"),

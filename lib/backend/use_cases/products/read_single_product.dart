@@ -7,8 +7,7 @@ class CreateSingleProductUseCase {
 
   CreateSingleProductUseCase(this._database);
 
-  Future<void> createSingleProduct({required ProductModel product}) async =>
-      await _database.createSingleProduct(product: product);
+  Future<void> call({required ProductModel product}) async => await _database.createSingleProduct(product: product);
 }
 
 class ReadSingleProductUseCase {
@@ -16,7 +15,7 @@ class ReadSingleProductUseCase {
 
   ReadSingleProductUseCase(this._database);
 
-  Future<ProductModel> getSingleProduct({required String productId}) async {
+  Future<ProductModel> call({required String productId}) async {
     final result = await _database.getSingleProduct(productId: productId);
     var product = ProductModel.fromMap(result.data()!);
     return product;
@@ -28,8 +27,7 @@ class EditSingleProductUseCase {
 
   EditSingleProductUseCase(this._database);
 
-  Future<void> editSingleProduct({required ProductModel product}) async =>
-      await _database.editSingleProduct(product: product);
+  Future<void> call({required ProductModel product}) async => await _database.editSingleProduct(product: product);
 }
 
 class DeleteSingleProductUseCase {
@@ -37,17 +35,35 @@ class DeleteSingleProductUseCase {
 
   DeleteSingleProductUseCase(this._database);
 
-  Future<void> deleteSingleProduct({required String productId}) async =>
-      await _database.deleteSingleProduct(productId: productId);
+  Future<void> call({required String productId}) async => await _database.deleteSingleProduct(productId: productId);
 }
-
 
 class GetAllProductRequestsUsingVendorIdUseCase {
   final ProductsDatabase _database;
 
   GetAllProductRequestsUsingVendorIdUseCase(this._database);
 
-  Future<List<ProductRequestModel>> getAllProductRequestsUsingVendorIdUseCase({required String vendorId}) async =>
-      await _database.getAllProductRequestsUsingVendorIdUseCase(vendorId: vendorId);
+  Future<List<ProductRequestModel>> call({required String vendorId}) async {
+    final request = await _database.getAllProductRequestsUsingVendorIdUseCase(vendorId: vendorId);
+    final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
+    return result;
+  }
 }
 
+class GetAllClientsUsingVendorIdUseCase {
+  final ProductsDatabase _database;
+  List<String> numberOfUsers = [];
+
+
+  GetAllClientsUsingVendorIdUseCase(this._database);
+
+  Future<List<String>> call({required String vendorId}) async {
+    final request = await _database.getAllProductRequestsUsingVendorIdUseCase(vendorId: vendorId);
+    final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
+    for (ProductRequestModel productRequest in result) {
+      final userId = productRequest.requesterId;
+      numberOfUsers.add(userId);
+    }
+    return numberOfUsers;
+  }
+}

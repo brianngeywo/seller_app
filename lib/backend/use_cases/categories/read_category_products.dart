@@ -6,7 +6,7 @@ class ReadCategoryProductsUseCase {
 
   ReadCategoryProductsUseCase(this._database);
 
-  Future<List<ProductModel>> getAllSingleCategoryProducts({required String category}) async {
+  Future<List<ProductModel>> call({required String category}) async {
     final result = await _database.getAllSingleCategoryProducts(category: category);
     var products = result.docs.map((e) => ProductModel.fromMap(e.data())).toList();
     return products;

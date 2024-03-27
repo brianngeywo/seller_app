@@ -39,7 +39,7 @@ class _EditProductPageState extends State<EditProductPage> {
 
       // Upload the image to Firebase Storage
       final imageUrl = await _uploadImageToFirebaseStorage(productId);
-      await _editSingleProductUseCase.editSingleProduct(
+      await _editSingleProductUseCase.call(
           product: ProductModel(
               id: product.id,
               title: product.title,
@@ -82,7 +82,6 @@ class _EditProductPageState extends State<EditProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var productsProvider = context.read<ProductsProvider>();
     var allCategories = ReadAllcategoriesUseCase(CategoriesDatabase());
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +95,7 @@ class _EditProductPageState extends State<EditProductPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FutureBuilder<List<CategoryModel>>(
-                  future: allCategories.getAllcategories(),
+                  future: allCategories.call(),
                   initialData: <CategoryModel>[],
                   builder: (context, snapshot) {
                     return DropdownButtonFormField(

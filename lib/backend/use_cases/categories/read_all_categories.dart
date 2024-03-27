@@ -7,7 +7,7 @@ class ReadAllcategoriesUseCase {
 
   ReadAllcategoriesUseCase(this._database);
 
-   Future<List<CategoryModel>> getAllcategories() async {
+   Future<List<CategoryModel>> call() async {
     final result =  await _database.getAllcategories();
     var categories = result.docs.map((e) => CategoryModel.fromMap(e.data())).toList();
     return categories;

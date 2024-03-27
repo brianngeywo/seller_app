@@ -5,6 +5,7 @@ import 'package:seller_app/backend/databases/product_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/providers/products_provider.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
+import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 import 'package:seller_app/edit_product.dart';
 import 'package:seller_app/local_data.dart';
 import 'package:seller_app/view_product_page.dart';
@@ -20,15 +21,16 @@ class _ViewAllProductsScreenState extends State<ViewAllProductsScreen> {
   @override
   Widget build(BuildContext context) {
     String selectedAction = "";
-    var productsProvider = context.read<ProductsProvider>();
+    // var productsProvider = context.read<ProductsProvider>();
     final getAllProducts = ReadAllProductsUseCase(ProductsDatabase());
+    final deleteSingleProductUseCase = DeleteSingleProductUseCase(ProductsDatabase());
     return Scaffold(
       appBar: AppBar(
         title: Text('Your products'),
       ),
       body: FutureBuilder<List<ProductModel>>(
-          future: productsProvider.getAllProducts(),
-          initialData: productsProvider.products,
+          future: getAllProducts(),
+          initialData: <ProductModel>[] ,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             print(snapshot.data);
             if (snapshot.hasData) {
@@ -60,7 +62,7 @@ class _ViewAllProductsScreenState extends State<ViewAllProductsScreen> {
                                               builder: (context) => EditProductPage(productModel: product)));
                                           break;
                                         case "2":
-                                          productsProvider.deleteSingleProduct(e.id);
+                                          deleteSingleProductUseCase.call(productId: e.id);
                                           Navigator.of(context).pop();
                                           break;
                                         default:

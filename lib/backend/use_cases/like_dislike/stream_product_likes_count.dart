@@ -3,7 +3,7 @@ import 'package:seller_app/constants.dart';
 
 class GetProductLikesCountUseCase {
   // Stream returning the count of likes for a specific product
-  Stream<int> getProductLikesCount(String productId) {
+  Stream<int> call(String productId) {
     return likeDislikesCollection
         .where('productId', isEqualTo: productId)
         .where('liked', isEqualTo: true) // Filter only likes
@@ -13,7 +13,7 @@ class GetProductLikesCountUseCase {
 }
 
 class GetProductDisLikesCountUseCase {
-  Stream<int> getProductDisLikesCount(String productId) {
+  Stream<int> call(String productId) {
     return likeDislikesCollection
         .where('productId', isEqualTo: productId)
         .where('liked', isEqualTo: false) // Filter only dislikes

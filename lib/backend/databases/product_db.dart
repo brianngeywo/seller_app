@@ -62,9 +62,15 @@ class ProductsDatabase {
     await productRequestsCollection.doc(product.id).set(product.toMap());
   }
 
-  Future<List<ProductRequestModel>> getAllProductRequestsUsingVendorIdUseCase({required String vendorId})  async {
+ Future<QuerySnapshot<Map<String, dynamic>>> getAllProductRequestsUsingVendorIdUseCase({required String vendorId})  async {
     final request = await productRequestsCollection.where("vendorId", isEqualTo: vendorId).get();
-    final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
-    return result;
+    // final result = request.docs.map((e) => ProductRequestModel.fromMap(e.data())).toList();
+    return request;
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllProductsUsingVendorId({required String vendorId}) async{
+    final request = await productsCollection.where("vendorId", isEqualTo: vendorId).get();
+    // final result = request.docs.map((e) => ProductModel.fromMap(e.data())).toList();
+    return request;
   }
 }

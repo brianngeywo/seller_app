@@ -12,6 +12,17 @@ class ReadAllProductsUseCase {
    }
 }
 
+
+class GetAllProductsUsingVendorIdUseCase {
+  final ProductsDatabase _database;
+  GetAllProductsUsingVendorIdUseCase(this._database);
+   Future<List<ProductModel>> call(String vendorId) async {
+    final result = await _database.getAllProductsUsingVendorId(vendorId: vendorId);
+    var products = result.docs.map((e) => ProductModel.fromMap(e.data())).toList();
+    return products;
+   }
+}
+
 class ReadAllProductsSortByLikesUseCase {
   final ProductsDatabase _database;
   ReadAllProductsSortByLikesUseCase(this._database);

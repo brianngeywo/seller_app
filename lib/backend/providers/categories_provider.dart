@@ -26,7 +26,7 @@ class CategoriesProvider extends ChangeNotifier {
   final ReadCategoryProductsUseCase _categoryProductsUseCase;
 
   Future<List<CategoryModel>> fetchCategories() async {
-    final response = await _allcategoriesUseCase.getAllcategories();
+    final response = await _allcategoriesUseCase.call();
     _categories = response;
     notifyListeners();
     return response;
@@ -39,5 +39,5 @@ class CategoriesProvider extends ChangeNotifier {
   }
 
   Future<List<ProductModel>> fetchCategoryProducts(String categoryId) async =>
-      await _categoryProductsUseCase.getAllSingleCategoryProducts(category: categoryId);
+      await _categoryProductsUseCase.call(category: categoryId);
 }

@@ -43,7 +43,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
         vendorId: vendorId,
         price: _priceController.text,
       );
-      await _createSingleProductUseCase.createSingleProduct(product: product);
+      await _createSingleProductUseCase.call(product: product);
       // Save the product to your database or perform any other necessary operations
       print('New product created: $product');
     }
@@ -82,7 +82,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FutureBuilder<List<CategoryModel>>(
-                  future: allCategories.getAllcategories(),
+                  future: allCategories.call(),
                   initialData: <CategoryModel>[],
                   builder: (context, snapshot) {
                     return DropdownButtonFormField(

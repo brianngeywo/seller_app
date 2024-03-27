@@ -6,7 +6,7 @@ class DislikeProductUseCase {
 
   DislikeProductUseCase(this._database);
 
-  Future<void> dislikeProduct({required String productId}) async {
+  Future<void> call({required String productId}) async {
     await _database.dislikeProduct(productId: productId, );
   }
 }

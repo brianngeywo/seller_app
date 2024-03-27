@@ -40,30 +40,30 @@ class LikeDislikesProvider with ChangeNotifier {
   Future<String> likeProduct({
     required String productId,
   }) async =>
-      await _likeProductUseCase.likeProduct(productId: productId);
+      await _likeProductUseCase.call(productId: productId);
 
   Future<void> dislikeProduct({
     required String productId,
   }) async =>
-      await _dislikeProductUseCase.dislikeProduct(productId: productId);
+      await _dislikeProductUseCase.call(productId: productId);
 
   Future<List<LikeDislikeModel>> readProductLikes(String productId) async {
-    final result = await _readProductLikesUseCase.readProductLikes(productId: productId);
+    final result = await _readProductLikesUseCase.call(productId: productId);
     return result;
   }
 
   Future<List<LikeDislikeModel>> readProductDislikes(String productId) async {
-    final result = await _readProductDislikesUseCase.readProductDislikes(productId: productId);
+    final result = await _readProductDislikesUseCase.call(productId: productId);
     return result;
   }
 
   Stream<int> getProductLikesCount({required String productId}) {
-    final likesStream = _getProductLikesCountUseCase.getProductLikesCount(productId);
+    final likesStream = _getProductLikesCountUseCase.call(productId);
     return likesStream;
   }
 
   Stream<int> getProductDisLikesCount({required String productId}) {
-    final likesStream = _getProductDisLikesCountUseCase.getProductDisLikesCount(productId);
+    final likesStream = _getProductDisLikesCountUseCase.call(productId);
     return likesStream;
   }
 }

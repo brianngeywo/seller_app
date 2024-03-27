@@ -5,6 +5,6 @@ class LikeProductUseCase {
 
   LikeProductUseCase(this._database);
 
-  Future<String> likeProduct({required String productId}) async =>
+  Future<String> call({required String productId}) async =>
       await _database.likeProduct(productId: productId);
 }
