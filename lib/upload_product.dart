@@ -10,6 +10,7 @@ import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/use_cases/categories/read_all_categories.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 import 'package:seller_app/constants.dart';
+import 'package:seller_app/local_data.dart';
 
 class UploadProductPage extends StatefulWidget {
   const UploadProductPage({Key? key}) : super(key: key);
@@ -69,7 +70,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var allCategories = ReadAllcategoriesUseCase(CategoriesDatabase());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Product'),

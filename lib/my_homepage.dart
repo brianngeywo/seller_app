@@ -5,7 +5,6 @@ import 'package:seller_app/all_products.dart';
 import 'package:seller_app/backend/databases/product_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/models/product_request_model.dart';
-import 'package:seller_app/backend/providers/products_provider.dart';
 import 'package:seller_app/backend/use_cases/products/read_all_products.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 import 'package:seller_app/constants.dart';
@@ -22,11 +21,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final getAllProductRequestsUsingVendorIdUseCase = GetAllProductRequestsUsingVendorIdUseCase(ProductsDatabase());
-  final GetAllProductsUsingVendorIdUseCase getAllProductsUsingVendorIdUseCase =
-      GetAllProductsUsingVendorIdUseCase(ProductsDatabase());
-  final GetAllClientsUsingVendorIdUseCase getAllClientsUsingVendorIdUseCase =
-      GetAllClientsUsingVendorIdUseCase(ProductsDatabase());
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: Colors.blue,
                               ),
                               FutureBuilder<List<ProductModel>>(
-                                  future: getAllProductsUsingVendorIdUseCase.call(firebaseAuth.currentUser!.uid),
+                                  future: getAllProductsUsingVendorIdUseCase.call(dummyUser.id),
                                   initialData: <ProductModel>[],
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {

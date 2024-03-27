@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seller_app/backend/databases/product_db.dart';
+import 'package:seller_app/backend/databases/users_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/models/product_request_model.dart';
 import 'package:seller_app/backend/models/user_model.dart';
-import 'package:seller_app/backend/providers/users_provider.dart';
 import 'package:seller_app/backend/use_cases/product_request/get_all_product_requests.dart';
+import 'package:seller_app/backend/use_cases/users/read_user.dart';
+import 'package:seller_app/local_data.dart';
 
 class ViewProductPage extends StatefulWidget {
   final ProductModel product;
@@ -20,8 +22,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
   @override
   Widget build(BuildContext context) {
     String selectedAction = "";
-    UsersProvider userProvider = context.read<UsersProvider>();
-    var getProductRequest = GetAllRequestsUseCase(ProductsDatabase());
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product.title),
@@ -96,7 +97,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                                 final request = requests[index];
                                 print("user id: " + request.requesterId);
                                 return FutureBuilder<UserModel>(
-                                    future: userProvider.readSingleUser(id: request.requesterId),
+                                    future: readSingleUser.call(id: request.requesterId),
                                     initialData: UserModel.empty(),
                                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                                       if (snapshot.hasData) {

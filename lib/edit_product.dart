@@ -12,8 +12,6 @@ import 'package:seller_app/backend/use_cases/categories/read_all_categories.dart
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
 import 'package:seller_app/local_data.dart';
 
-import 'backend/providers/products_provider.dart';
-
 class EditProductPage extends StatefulWidget {
   final ProductModel productModel;
 
@@ -82,7 +80,6 @@ class _EditProductPageState extends State<EditProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var allCategories = ReadAllcategoriesUseCase(CategoriesDatabase());
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Product'),

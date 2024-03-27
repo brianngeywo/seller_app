@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:seller_app/backend/databases/users_db.dart';
 import 'package:seller_app/backend/models/user_model.dart';
 import 'package:seller_app/backend/use_cases/users/edit_user.dart';
+import 'package:seller_app/local_data.dart';
 
 class EditSellerProfile extends StatefulWidget {
   final UserModel user;
@@ -102,7 +103,7 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: () {
-              EditUserUseCase _editUser = EditUserUseCase(UsersDatabase());
+
               // Update user profile with the new data
               final updatedUser = UserModel(
                   id: widget.user.id,
@@ -113,7 +114,7 @@ class _EditSellerProfileState extends State<EditSellerProfile> {
                   password: _passwordController.text,
                   username: _usernameController.text);
 
-              _editUser.call(updatedUser);
+              editUser.call(updatedUser);
               Navigator.of(context).pop();
               print(updatedUser.toMap());
             },

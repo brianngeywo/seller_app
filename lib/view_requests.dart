@@ -2,16 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seller_app/backend/databases/product_db.dart';
+import 'package:seller_app/backend/databases/users_db.dart';
 import 'package:seller_app/backend/models/product_model.dart';
 import 'package:seller_app/backend/models/product_request_model.dart';
 import 'package:seller_app/backend/models/user_model.dart';
-import 'package:seller_app/backend/providers/users_provider.dart';
 import 'package:seller_app/backend/use_cases/product_request/accept_product_request.dart';
 import 'package:seller_app/backend/use_cases/products/read_single_product.dart';
+import 'package:seller_app/backend/use_cases/users/read_user.dart';
 import 'package:seller_app/local_data.dart';
 import 'package:seller_app/view_product_page.dart';
-
-import 'backend/providers/products_provider.dart';
 
 class ViewProductRequestsScreen extends StatefulWidget {
   const ViewProductRequestsScreen({super.key});
@@ -21,15 +20,11 @@ class ViewProductRequestsScreen extends StatefulWidget {
 }
 
 class _ViewProductRequestsScreenState extends State<ViewProductRequestsScreen> {
+
   @override
   Widget build(BuildContext context) {
     String selectedAction = "";
-    var usersProvider = context.read<UsersProvider>();
-    final acceptProductRequest = AcceptRequestProductUseCase(ProductsDatabase());
-    final denyProductRequest = DenyRequestProductUseCase(ProductsDatabase());
-    final getSingleProduct = ReadSingleProductUseCase(ProductsDatabase());
-    final getAllProductRequests = GetAllProductRequestsUsingVendorIdUseCase(ProductsDatabase());
-    return Scaffold(
+ return Scaffold(
       appBar: AppBar(
         title: Text('Your products requests'),
       ),
@@ -47,7 +42,7 @@ class _ViewProductRequestsScreenState extends State<ViewProductRequestsScreen> {
                   itemBuilder: (context, index) {
                     final productRequest = productRequests[index];
                     return FutureBuilder<UserModel>(
-                        future: usersProvider.readSingleUser(id: productRequest.requesterId),
+                        future: readSingleUser.call(id: productRequest.requesterId),
                         builder: (context, snapshot) {
                           var user = snapshot.data!;
                           return ListTile(
